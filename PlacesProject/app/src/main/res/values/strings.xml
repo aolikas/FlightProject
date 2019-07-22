@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">PlacesProject</string>
+    <string name="activity_main_permission_request">Permission Request</string>
+    <string name="activity_main_text_please_allow_the_permission">Please allow the permission</string>
+    <string name="activity_main_btn_text">Permission granted</string>
+    <string name="title_activity_map">MapActivity</string>
+    <string name="content_map_btn_text">Find Restaurants</string>
+</resources>

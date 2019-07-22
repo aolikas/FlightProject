@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="activity_main_relative_padding">40dp</dimen>
+    <dimen name="activity_main_text_size_permission">24sp</dimen>
+    <dimen name="activity_main_linear_text_margin_top">20dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
+</resources>
