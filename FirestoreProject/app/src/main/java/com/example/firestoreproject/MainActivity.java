@@ -18,15 +18,14 @@ import com.google.firebase.firestore.DocumentSnapshot;
 
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.Query;
+
+
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firebase.firestore.Transaction;
-
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -54,9 +53,8 @@ public class MainActivity extends AppCompatActivity {
         etTags = findViewById(R.id.edit_tags);
         textViewData = findViewById(R.id.text_view_data);
 
-        updateArray();
+        updateNestedValue();
     }
-
 
 
     public void addNote(View v) {
@@ -71,7 +69,11 @@ public class MainActivity extends AppCompatActivity {
 
         String tagInput = etTags.getText().toString();
         String[] tagArray = tagInput.split("\\s*,\\s*");
-        List<String > tags = Arrays.asList(tagArray);
+        Map<String, Boolean>  tags = new HashMap<>();
+
+        for(String tag : tagArray) {
+            tags.put(tag, true);
+        }
 
         Note note = new Note(title, description, priority, tags);
 
@@ -92,30 +94,30 @@ public class MainActivity extends AppCompatActivity {
 
     public void loadNotes(View v) {
 
-      notebookRef.whereArrayContains("tags","tag5").get()
-              .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                  @Override
-                  public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                      String data = "";
+        notebookRef.whereEqualTo("tags.tag2", true).get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        String data = "";
 
-                      for(QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-                          Note note = documentSnapshot.toObject(Note.class);
-                          note.setDocumentId(documentSnapshot.getId());
+                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                            Note note = documentSnapshot.toObject(Note.class);
+                            note.setDocumentId(documentSnapshot.getId());
 
-                          String documentId = note.getDocumentId();
+                            String documentId = note.getDocumentId();
 
-                          data +=  "id: " + documentId;
+                            data += "id: " + documentId;
 
-                          for (String tag : note.getTags()) {
-                              data += "\n-" + tag;
-                          }
-                          data += "\n\n";
+                            for (String tag : note.getTags().keySet()) {
+                                data += "\n-" + tag;
+                            }
+                            data += "\n\n";
 
-                      }
+                        }
 
-                      textViewData.setText(data);
-                  }
-              });
+                        textViewData.setText(data);
+                    }
+                });
         //-----------------------------------------------------------------
 
         //notebookRef.orderBy("priority")
@@ -218,9 +220,9 @@ public class MainActivity extends AppCompatActivity {
         // });
     }
 
-    private void updateArray() {
+    private void updateNestedValue() {
         notebookRef.document(
-                "E6B3bK3O8BSwQzMeI6EK")
-                .update("tags", FieldValue.arrayUnion("new tag"));
+                "kG3JmmEA7MMMd1jGTCrS")
+                .update("tags.tag2", false);
     }
 }
